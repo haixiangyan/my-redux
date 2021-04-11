@@ -1,6 +1,8 @@
 function createStore<S, A extends Action>(reducer: Reducer<S, A>, preloadedState, enhancer?: Function) {
   let currentState = preloadedState as S
   let currentReducer = reducer
+  let currentListeners: (() => void)[] = []
+  let nextListeners = currentListeners
   let isDispatching = false
 
   // 获取 state
@@ -24,12 +26,54 @@ function createStore<S, A extends Action>(reducer: Reducer<S, A>, preloadedState
       isDispatching = false
     }
 
+    const listeners = (currentListeners = nextListeners)
+    listeners.forEach(listener => listener())
+
     return action
+  }
+
+  // 将 nextListeners 作为临时 listeners 集合
+  // 防止 dispatching 时出现的一些 bug
+  function ensureCanMutateNextListeners() {
+    if (nextListeners !== currentListeners) {
+      nextListeners = currentListeners.slice()
+    }
+  }
+
+  // 订阅
+  function subscribe(listener: () => void) {
+    if (isDispatching) {
+      throw new Error('还在 dispatching 呢，subscribe 不了啊')
+    }
+
+    let isSubscribed = true
+
+    ensureCanMutateNextListeners()
+    nextListeners.push(listener)
+
+    return function unsubscribe() {
+      if (!isSubscribed) {
+        return
+      }
+
+      if (isDispatching) {
+        throw new Error('还在 dispatching 呢，unsubscribe 不了啊')
+      }
+
+      isSubscribed = false
+
+      ensureCanMutateNextListeners()
+
+      const index = nextListeners.indexOf(listener)
+      nextListeners.splice(index, 1)
+      currentListeners = null
+    }
   }
 
   return {
     getState,
-    dispatch
+    dispatch,
+    subscribe,
   }
 }
 

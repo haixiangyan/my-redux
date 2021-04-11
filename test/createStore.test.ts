@@ -31,4 +31,28 @@ describe('测试 createStore', () => {
     store.dispatch({ type: 'decrement', payload: 4 })
     expect(store.getState()).toEqual(-1)
   })
+  it('测试 subscribe', () => {
+    const store = createStore(reducer, 1)
+
+    const listener = jest.fn()
+    store.subscribe(listener)
+
+    // 1 + 2
+    store.dispatch({ type: 'increment', payload: 2 })
+    expect(store.getState()).toEqual(3)
+    expect(listener).toBeCalledTimes(1)
+  })
+  it('测试 unsubscribe', () => {
+    const store = createStore(reducer, 1)
+
+    const listener = jest.fn()
+    const unsubscribe = store.subscribe(listener)
+
+    unsubscribe()
+
+    // 1 + 2
+    store.dispatch({ type: 'increment', payload: 2 })
+    expect(store.getState()).toEqual(3)
+    expect(listener).toBeCalledTimes(0)
+  })
 })
