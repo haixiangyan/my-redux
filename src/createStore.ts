@@ -1,5 +1,7 @@
 import actionTypes from "./utils/actionTypes";
 import $$observable from "./utils/symbolObservable";
+import isPlainObject from "./utils/isPlainObject";
+import kindOf from "./utils/kindOf";
 
 function createStore<S, A extends Action>(reducer: Reducer<S, A>, preloadedState, enhancer?: Function) {
   let currentState = preloadedState as S
@@ -18,6 +20,10 @@ function createStore<S, A extends Action>(reducer: Reducer<S, A>, preloadedState
 
   // 分发 action 的函数
   function dispatch(action: A) {
+    if (!isPlainObject(action)) {
+      throw new Error(`不是纯净的 Object，是一个类似 ${kindOf(action)} 的东西`)
+    }
+
     if (isDispatching) {
       throw new Error('还在 dispatching 呢，dispatch 不了啊')
     }
@@ -105,6 +111,7 @@ function createStore<S, A extends Action>(reducer: Reducer<S, A>, preloadedState
     }
   }
 
+  // 初始化
   dispatch({type: actionTypes.INIT} as A)
 
   const store = {
