@@ -1,3 +1,5 @@
+import actionTypes from "./utils/actionTypes";
+
 function createStore<S, A extends Action>(reducer: Reducer<S, A>, preloadedState, enhancer?: Function) {
   let currentState = preloadedState as S
   let currentReducer = reducer
@@ -70,11 +72,24 @@ function createStore<S, A extends Action>(reducer: Reducer<S, A>, preloadedState
     }
   }
 
-  return {
+  function replaceReducer<NewState, NewAction extends A>(nextReducer: Reducer<NewState, NewAction>) {
+    ((currentReducer as unknown) as Reducer<NewState, NewAction>) = nextReducer
+
+    dispatch({type: actionTypes.REPLACE} as A)
+
+    return store
+  }
+
+  dispatch({type: actionTypes.INIT} as A)
+
+  const store = {
     getState,
     dispatch,
     subscribe,
+    replaceReducer
   }
+
+  return store
 }
 
 export default createStore

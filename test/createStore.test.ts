@@ -24,11 +24,11 @@ describe('测试 createStore', () => {
     expect(store.getState()).toEqual(1)
 
     // 1 + 2
-    store.dispatch({ type: 'increment', payload: 2 })
+    store.dispatch({type: 'increment', payload: 2})
     expect(store.getState()).toEqual(3)
 
     // 3 - 4
-    store.dispatch({ type: 'decrement', payload: 4 })
+    store.dispatch({type: 'decrement', payload: 4})
     expect(store.getState()).toEqual(-1)
   })
   it('测试 subscribe', () => {
@@ -38,7 +38,7 @@ describe('测试 createStore', () => {
     store.subscribe(listener)
 
     // 1 + 2
-    store.dispatch({ type: 'increment', payload: 2 })
+    store.dispatch({type: 'increment', payload: 2})
     expect(store.getState()).toEqual(3)
     expect(listener).toBeCalledTimes(1)
   })
@@ -51,8 +51,21 @@ describe('测试 createStore', () => {
     unsubscribe()
 
     // 1 + 2
-    store.dispatch({ type: 'increment', payload: 2 })
+    store.dispatch({type: 'increment', payload: 2})
     expect(store.getState()).toEqual(3)
     expect(listener).toBeCalledTimes(0)
+  })
+  it('测试 replaceReducer', () => {
+    const store = createStore(reducer, 1)
+
+    const newReducer = jest.fn((state, action) => {
+      return 'the new state'
+    })
+
+    store.replaceReducer(newReducer)
+
+    store.dispatch({type: 'increment', payload: 2})
+    expect(store.getState()).toEqual('the new state') // 新 reducer 的返回
+    expect(newReducer).toBeCalledTimes(2) // REPLACE + increment
   })
 })
