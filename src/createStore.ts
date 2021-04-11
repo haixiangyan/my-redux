@@ -1,4 +1,5 @@
 import actionTypes from "./utils/actionTypes";
+import $$observable from "./utils/symbolObservable";
 
 function createStore<S, A extends Action>(reducer: Reducer<S, A>, preloadedState, enhancer?: Function) {
   let currentState = preloadedState as S
@@ -72,6 +73,7 @@ function createStore<S, A extends Action>(reducer: Reducer<S, A>, preloadedState
     }
   }
 
+  // 替换 reducer
   function replaceReducer<NewState, NewAction extends A>(nextReducer: Reducer<NewState, NewAction>) {
     ((currentReducer as unknown) as Reducer<NewState, NewAction>) = nextReducer
 
@@ -80,13 +82,37 @@ function createStore<S, A extends Action>(reducer: Reducer<S, A>, preloadedState
     return store
   }
 
+  // 支持 observable/reactive 库
+  function observable() {
+    const outerSubscribe = subscribe
+
+    return {
+      subscribe(observer: unknown) {
+        function observeState() {
+          const observerAsObserver = observer as Observer<S>
+          if (observerAsObserver.next) {
+            observerAsObserver.next(getState())
+          }
+        }
+
+        observeState() // 获取当前 state
+        const unsubscribe = outerSubscribe(observeState)
+        return {unsubscribe}
+      },
+      [$$observable]() {
+        return this
+      }
+    }
+  }
+
   dispatch({type: actionTypes.INIT} as A)
 
   const store = {
     getState,
     dispatch,
     subscribe,
-    replaceReducer
+    replaceReducer,
+    observable,
   }
 
   return store

@@ -68,4 +68,18 @@ describe('测试 createStore', () => {
     expect(store.getState()).toEqual('the new state') // 新 reducer 的返回
     expect(newReducer).toBeCalledTimes(2) // REPLACE + increment
   })
+  it('测试 observable', () => {
+    const store = createStore(reducer, 1)
+
+    const next = jest.fn((state) => state)
+
+    const observable = store.observable()
+    observable.subscribe({next}) // 订阅后 next 一下
+    expect(next).toBeCalledWith(1)
+
+    store.dispatch({type: 'increment', payload: 2}) // 又 next 一下
+
+    expect(next).toBeCalledWith(3)
+    expect(next).toBeCalledTimes(2)
+  })
 })

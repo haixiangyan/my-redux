@@ -7,3 +7,7 @@ interface AnyAction extends Action {
 }
 
 type Reducer<S = any, A extends Action = AnyAction> = (state: S | undefined, action: A) => S
+
+type Observer<V> = {
+  next?:(value: V) => void
+}
