@@ -1,4 +1,4 @@
-const isPlainObject = (obj: any) => {
+function isPlainObject(obj: any) {
   // 检查类型
   if (typeof obj !== 'object' || obj === null) return false
 

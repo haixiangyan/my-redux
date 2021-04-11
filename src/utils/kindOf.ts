@@ -1,4 +1,4 @@
-const isDate = (value: any) => {
+function isDate(value: any) {
   if (value instanceof Date) return true
   return (
     typeof value.toDateString === 'function' &&
@@ -7,7 +7,7 @@ const isDate = (value: any) => {
   )
 }
 
-const isError = (value: any) => {
+function isError(value: any) {
   if (value instanceof Error) return true
   return (
     typeof value.message === 'string' &&
@@ -16,11 +16,11 @@ const isError = (value: any) => {
   )
 }
 
-const getCtorName = (value: any): string | null => {
+function getCtorName(value: any): string | null {
   return typeof value.constructor === 'function' ? value.constructor.name : null
 }
 
-const kindOf = (value: any): string => {
+function kindOf(value: any): string {
   if (value === void 0) return 'undefined'
   if (value === null) return 'null'
 

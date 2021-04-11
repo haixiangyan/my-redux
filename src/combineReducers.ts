@@ -1,7 +1,7 @@
 import actionTypes from "./utils/actionTypes";
 import isPlainObject from "./utils/isPlainObject";
 
-const assertReducerShape = (reducers: ReducerMapObject) => {
+function assertReducerShape(reducers: ReducerMapObject) {
   Object.values(reducers).forEach(reducer => {
     const initialState = reducer(undefined, {type: actionTypes.INIT})
     if (typeof initialState === 'undefined') {
@@ -15,12 +15,12 @@ const assertReducerShape = (reducers: ReducerMapObject) => {
   })
 }
 
-const getUnexpectedStateShapeWarningMessage = (
+function getUnexpectedStateShapeWarningMessage(
   inputState: object,
   reducers: ReducerMapObject,
   action: Action,
   unexpectedKeyCache: {[key: string]: true}
-) => {
+) {
   if (Object.keys(reducers).length === 0) {
     return '都没有 reducer 还 combine 个啥呀'
   }
@@ -42,7 +42,7 @@ const getUnexpectedStateShapeWarningMessage = (
   }
 }
 
-const combineReducers = (reducers: ReducerMapObject) => {
+function combineReducers(reducers: ReducerMapObject) {
   // 检查是否为函数
   let finalReducers: ReducerMapObject = {}
   Object.entries(reducers).forEach(([key, reducer]) => {
