@@ -116,4 +116,6 @@ dist
 .yarn/build-state.yml
 .pnp.*
 
+package-lock.json
+
 .idea
