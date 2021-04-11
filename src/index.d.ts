@@ -16,6 +16,15 @@ interface Dispatch<A extends Action = AnyAction> {
   <T extends A>(action: T, ...extraArgs: any[]): T
 }
 
+interface MiddlewareAPI<D extends Dispatch = Dispatch, S = any> {
+  dispatch: D
+  getState(): S
+}
+
+interface Middleware<S = any, D extends Dispatch = Dispatch> {
+  (api: MiddlewareAPI): (next: D) => (action: Action) => any
+}
+
 type ReducerMapObject<S = any, A extends Action = AnyAction> = {
   [K in keyof S]: Reducer<S, A>
 }

@@ -4,6 +4,10 @@ import isPlainObject from "./utils/isPlainObject";
 import kindOf from "./utils/kindOf";
 
 function createStore<S, A extends Action>(reducer: Reducer<S, A>, preloadedState, enhancer?: Function) {
+  if (enhancer) {
+    return enhancer(createStore)(reducer, preloadedState)
+  }
+
   let currentState = preloadedState as S
   let currentReducer = reducer
   let currentListeners: (() => void)[] = []
