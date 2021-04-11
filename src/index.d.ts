@@ -11,3 +11,7 @@ type Reducer<S = any, A extends Action = AnyAction> = (state: S | undefined, act
 type Observer<V> = {
   next?:(value: V) => void
 }
+
+type ReducerMapObject<S = any, A extends Action = AnyAction> = {
+  [K in keyof S]: Reducer<S, A>
+}

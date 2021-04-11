@@ -2,7 +2,8 @@ const randomString = () => Math.random().toString(36).substring(7).split('').joi
 
 const actionTypes = {
   INIT: `@@redux/INIT${randomString()}`,
-  REPLACE: `@@redux/REPLACE${randomString()}`
+  REPLACE: `@@redux/REPLACE${randomString()}`,
+  PROBE_UNKNOWN_ACTION: () => `@@redux/PROBE_UNKNOWN_ACTION${randomString()}`
 }
 
 export default actionTypes
