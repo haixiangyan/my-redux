@@ -66,7 +66,7 @@ function createStore<S, A extends Action>(reducer: Reducer<S, A>, preloadedState
 
       const index = nextListeners.indexOf(listener)
       nextListeners.splice(index, 1)
-      currentListeners = null
+      currentListeners = []
     }
   }
 
