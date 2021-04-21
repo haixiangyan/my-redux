@@ -546,14 +546,14 @@ const dispatch3 = (dispatch2) => {...}
 ```ts
 const logger1 => (store) => (next) => (action) => {
     console.log('logger1 before')
-    let result = originalDispatch(action)
+    let result = next(action)
     console.log('logger 1 after')
     return result
 }
 
 const logger2 => (store) => (next) => (action) => {
     console.log('logger2 before')
-    let result = originalDispatch(action)
+    let result = next(action)
     console.log('logger2 after')
     return result
 }
