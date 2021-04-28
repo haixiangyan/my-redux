@@ -2,6 +2,8 @@
 
 ![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8708739b76f94e7e86b6825c7efac988~tplv-k3u1fbpfcp-zoom-1.image)
 
+[![Build Status](https://www.travis-ci.com/Haixiang6123/my-redux.svg?branch=main)](https://www.travis-ci.com/Haixiang6123/my-redux)
+
 > 文章源码：https://github.com/Haixiang6123/my-redux
 > 
 > 参考轮子：https://www.npmjs.com/package/redux
