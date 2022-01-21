@@ -45,7 +45,7 @@ Redux 本来就是一个超级简单的库，只是文档不知不觉把它写�
 这个函数创建一个 Object，里面存放数据，并提供读和写方法。实现如下：
 
 ```ts
-function createStore(reduce, preloadedState, enhancer) {
+function createStore(reducer, preloadedState, enhancer) {
   let currentState = preloadedState // 当前数据（状态）
   let currentReducer = reducer // 计算新数据（状态）
   let isDispatching = false // 是否在 dispatch
@@ -553,7 +553,7 @@ const logger1 => (store) => (next) => (action) => {
     return result
 }
 
-const logger2 => (store) => (next) => (action) => {
+const logger2 = (store) => (next) => (action) => {
     console.log('logger2 before')
     let result = next(action)
     console.log('logger2 after')
